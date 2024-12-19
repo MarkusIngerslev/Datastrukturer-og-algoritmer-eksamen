@@ -26,6 +26,29 @@ class Rectangle {
       return false;
     }
   }
+
+  // check if the rectangle intersects another rectangle
+  intersects(boundary) {
+    let boundaryRight = boundary.x + boundary.w;
+    let boundaryLeft = boundary.x - boundary.w;
+    let boundaryTop = boundary.y - boundary.h;
+    let boundaryBottom = boundary.y + boundary.h;
+
+    let rangeRight = this.x + this.w;
+    let rangeLeft = this.x - this.w;
+    let rangeTop = this.y - this.h;
+    let rangeBottom = this.y + this.h;
+
+    // if the boundary intersects the range return true
+    if (
+      boundaryRight >= rangeLeft &&
+      boundaryLeft <= rangeRight &&
+      boundaryTop <= rangeBottom &&
+      boundaryBottom >= rangeTop
+    ) {
+      return true;
+    }
+  }
 }
 
 class QuadTree {
@@ -99,7 +122,27 @@ class QuadTree {
   }
 
   // find all points in range
-  query() {}
+  query(range, found) {
+    // if the range does not intersect the boundary, return
+    if (!range.intersects(this.boundary)) {
+      return false;
+    } else {
+      for (let i = 0; i < this.points.length; i++) {
+        if (range.contains(this.points[i])) {
+          found.push(this.points[i]);
+        }
+      }
+
+      if (this.divided) {
+        this.northeast.query(range, found);
+        this.northwest.query(range, found);
+        this.southeast.query(range, found);
+        this.southwest.query(range, found);
+      }
+    }
+    // print(found);
+    return found;
+  }
 
   // show the quadtree
   display() {

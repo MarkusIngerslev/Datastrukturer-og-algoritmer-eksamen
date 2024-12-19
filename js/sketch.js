@@ -19,5 +19,21 @@ function setup() {
 
 function draw() {
   background(220);
+
+  let range = new Rectangle(mouseX, mouseY, 40, 40);
+  noFill();
+  stroke(0, 255, 0);
+  rect(range.x, range.y, range.w * 2, range.h * 2);
+
+  let foundPoints = [];
+
+  quadtree.query(range, foundPoints);
   quadtree.display();
+
+  // draw the points within the quart box with p5.js
+  for (let i = 0; i < foundPoints.length; i++) {
+    noStroke();
+    fill(255, 255, 0);
+    ellipse(foundPoints[i].x, foundPoints[i].y, 10, 10);
+  }
 }
