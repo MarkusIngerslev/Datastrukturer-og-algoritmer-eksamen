@@ -1,7 +1,8 @@
 class Point {
-  constructor(x, y) {
+  constructor(x, y, userData) {
     this.x = x;
     this.y = y;
+    this.userData = userData;
   }
 }
 
@@ -111,6 +112,11 @@ class QuadTree {
     this.divided = false;
   }
 
+  clearQuadtree() {
+    this.points = [];
+    this.divided = false;
+  }
+
   // insert a point into the quadtree
   insert(point) {
     // if the point is not in the boundary, return
@@ -210,11 +216,11 @@ class QuadTree {
     );
 
     // draw the points with p5.js
-    for (let i = 0; i < this.points.length; i++) {
-      noStroke();
-      fill(255, 0, 0);
-      ellipse(this.points[i].x, this.points[i].y, 10, 10);
-    }
+    // for (let i = 0; i < this.points.length; i++) {
+    //   noStroke();
+    //   fill(255, 0, 0);
+    //   ellipse(this.points[i].x, this.points[i].y, 10, 10);
+    // }
 
     if (this.divided) {
       this.northeast.display();
