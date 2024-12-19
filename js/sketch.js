@@ -20,10 +20,15 @@ function setup() {
 function draw() {
   background(220);
 
-  let range = new Rectangle(mouseX, mouseY, 40, 40);
+  // let range = new Rectangle(mouseX, mouseY, 40, 40);
+  // noFill();
+  // stroke(0, 255, 0);
+  // rect(range.x, range.y, range.w * 2, range.h * 2);
+
+  let range = new Circle(mouseX, mouseY, 40);
   noFill();
   stroke(0, 255, 0);
-  rect(range.x, range.y, range.w * 2, range.h * 2);
+  ellipse(range.x, range.y, range.r * 2, range.r * 2);
 
   let foundPoints = [];
 

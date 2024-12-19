@@ -5,6 +5,58 @@ class Point {
   }
 }
 
+class Circle {
+  constructor(x, y, r) {
+    this.x = x;
+    this.y = y;
+    this.r = r;
+  }
+
+  // check if a point is in the circle
+  contains(point) {
+    // calculate the distance between the point and the circle's center
+    let distX = Math.abs(this.x - point.x);
+    let distY = Math.abs(this.y - point.y);
+    let distance = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
+
+    // if the distance is less than the circle's radius, the point is inside
+    if (distance <= this.r) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // check if the circle intersects a rectangle
+  intersects(boundary) {
+    let closeX = this.x;
+    let closeY = this.y;
+
+    // if the circle's center is outside the rectangle, find the closest point
+    if (this.x < boundary.x - boundary.w) {
+      closeX = boundary.x - boundary.w;
+    } else if (this.x > boundary.x + boundary.w) {
+      closeX = boundary.x + boundary.w;
+    }
+    if (this.y < boundary.y - boundary.h) {
+      closeY = boundary.y - boundary.h;
+    } else if (this.y > boundary.y + boundary.h) {
+      closeY = boundary.y + boundary.h;
+    }
+
+    // calculate the distance between the point and the circle's center
+    let distX = Math.abs(this.x - closeX);
+    let distY = Math.abs(this.y - closeY);
+    let distance = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
+
+    if (distance <= this.r) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+
 class Rectangle {
   constructor(x, y, w, h) {
     this.x = x;
