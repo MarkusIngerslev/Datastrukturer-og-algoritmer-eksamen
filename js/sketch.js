@@ -1,34 +1,37 @@
-let qtree;
+let particles = [];
 
 function setup() {
-  createCanvas(400, 400);
-  background(255);
+  createCanvas(600, 400);
 
-  let boundary = new Rectangle(200, 200, 200, 200);
-  qtree = new QuadTree(boundary, 4);
-
-  for (let i = 0; i < 300; i++) {
-    let x = randomGaussian(width / 2, width / 8);
-    let y = randomGaussian(height / 2, height / 8);
-    let p = new Point(x, y);
-    qtree.insert(p);
+  for (let i = 0; i < 1500; i++) {
+    particles[i] = new Particle(random(width), random(height));
   }
 }
 
 function draw() {
   background(0);
-  qtree.show();
 
-  stroke(0, 255, 0);
-  rectMode(CENTER);
-  let range = new Rectangle(mouseX, mouseY, 25, 25);
+  let boundary = new Rectangle(300, 200, 600, 400);
+  let qtree = new QuadTree(boundary, 4);
 
-  if (mouseX < width && mouseY < height) {
-    rect(range.x, range.y, range.w * 2, range.h * 2);
+  for (let p of particles) {
+    let point = new Point(p.x, p.y, p);
+    qtree.insert(point);
+
+    p.move();
+    p.render();
+    p.setHighlight(false);
+  }
+
+  for (let p of particles) {
+    let range = new Circle(p.x, p.y, p.r * 2);
     let points = qtree.query(range);
-    for (let p of points) {
-      strokeWeight(2);
-      point(p.x, p.y);
+    for (let point of points) {
+      let other = point.userData;
+      // for (let other of particles) {
+      if (p !== other && p.intersects(other)) {
+        p.setHighlight(true);
+      }
     }
   }
 }
