@@ -3,8 +3,12 @@
   <img src="./assets/brute-force-image.png" height="400">
 
   <h1>
-  QuadTree
+  Brug af <strong>QuadTree</strong> til udrening af kollision mellem partikler
   </h1>
+
+  <p>
+  Udarbejdet af <strong><em>Markus Ingerslev Olsen</em></strong>
+  </p>
 </div>
 
 I dette projekt har jeg benyttet et quadtree til at beregne kollisionerne mellem forskellige partikler indenfor et område.
