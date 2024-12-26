@@ -1,3 +1,7 @@
+// ====================
+// Point class in tree
+// ====================
+
 class Point {
   constructor(x, y, userData) {
     this.x = x;
@@ -5,6 +9,10 @@ class Point {
     this.userData = userData;
   }
 }
+
+// ====================
+//    Circle search
+// ====================
 
 class Circle {
   constructor(x, y, r) {
@@ -28,12 +36,12 @@ class Circle {
     }
   }
 
-  // check if the circle intersects a rectangle
+  // check if the circle intersects
   intersects(boundary) {
     let closeX = this.x;
     let closeY = this.y;
 
-    // if the circle's center is outside the rectangle, find the closest point
+    // if the circle's center is outside the range, find the closest point
     if (this.x < boundary.x - boundary.w) {
       closeX = boundary.x - boundary.w;
     } else if (this.x > boundary.x + boundary.w) {
@@ -50,6 +58,7 @@ class Circle {
     let distY = Math.abs(this.y - closeY);
     let distance = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
 
+    // if the distance is less than the circle's radius, the circles intersect
     if (distance <= this.r) {
       return true;
     } else {
@@ -57,6 +66,10 @@ class Circle {
     }
   }
 }
+
+// ====================
+//   Rectangle search
+// ====================
 
 class Rectangle {
   constructor(x, y, w, h) {
@@ -103,6 +116,10 @@ class Rectangle {
     }
   }
 }
+
+// ====================
+//   Quadtree class
+// ====================
 
 class QuadTree {
   constructor(boundary, capacity) {
@@ -181,6 +198,10 @@ class QuadTree {
 
   // find all points in range
   query(range, found) {
+    // initialize the found array if it does not exist
+    if (!found) {
+      found = [];
+    }
     // if the range does not intersect the boundary, return
     if (!range.intersects(this.boundary)) {
       return false;
@@ -205,8 +226,9 @@ class QuadTree {
   // show the quadtree
   display() {
     // draw the boundary with p5.js
-    noFill();
     stroke(0);
+    strokeWeight(1);
+    noFill();
     rectMode(CENTER);
     rect(
       this.boundary.x,
@@ -214,13 +236,6 @@ class QuadTree {
       this.boundary.w * 2,
       this.boundary.h * 2
     );
-
-    // draw the points with p5.js
-    // for (let i = 0; i < this.points.length; i++) {
-    //   noStroke();
-    //   fill(255, 0, 0);
-    //   ellipse(this.points[i].x, this.points[i].y, 10, 10);
-    // }
 
     if (this.divided) {
       this.northeast.display();

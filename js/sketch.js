@@ -1,8 +1,8 @@
 let quadtree;
 let boundary;
-let capacity = 1;
+let capacity = 4;
 let num = 1050;
-let radius = 3;
+let radius = 2;
 
 let particles = [];
 
@@ -11,21 +11,19 @@ function setup() {
   for (let i = 0; i < num; i++) {
     particles[i] = new Particle(random(width), random(height));
   }
-
-  boundary = new Rectangle(width / 2, height / 2, width / 2, height / 2);
-  quadtree = new QuadTree(boundary, capacity);
 }
 
 function draw() {
   background(220);
+  // Print the frameRate to see difference between QuadTree and Brute Force
+  print(frameRate());
 
-  // use the p5.js frameRate() function to display the frame rate
-  // check to see if quadtree is working
-  // print(frameRate());
+  boundary = new Rectangle(width / 2, height / 2, width / 2, height / 2);
+  quadtree = new QuadTree(boundary, capacity);
 
   // clear the quadtree
   quadtree.clearQuadtree();
-  
+
   // insert random points into the quadtree
   for (let i = 0; i < num; i++) {
     let p = new Point(particles[i].x, particles[i].y, particles[i]);
@@ -57,6 +55,7 @@ function draw() {
 }
 
 function drawRectangle() {
+  // create a range object with the mouse position
   let range = new Rectangle(mouseX, mouseY, 40, 40);
   noFill();
   stroke(0, 255, 0);
@@ -64,9 +63,10 @@ function drawRectangle() {
 
   let foundPoints = [];
 
+  // query the quadtree with the range object
   quadtree.query(range, foundPoints);
-  quadtree.display();
 
+  // draw the points within the quart box with p5.js
   for (let i = 0; i < foundPoints.length; i++) {
     noStroke();
     fill(255, 255, 0);
@@ -75,6 +75,7 @@ function drawRectangle() {
 }
 
 function drawCircle() {
+  // create a range object with the mouse position
   let range = new Circle(mouseX, mouseY, 40);
   noFill();
   stroke(0, 255, 0);
@@ -82,13 +83,13 @@ function drawCircle() {
 
   let foundPoints = [];
 
+  // query the quadtree with the range object
   quadtree.query(range, foundPoints);
-  quadtree.display();
 
   // draw the points within the quart box with p5.js
   for (let i = 0; i < foundPoints.length; i++) {
     noStroke();
     fill(255, 255, 0);
-    ellipse(foundPoints[i].x, foundPoints[i].y, 10, 10);
+    ellipse(foundPoints[i].x, foundPoints[i].y, 4, 4);
   }
 }
