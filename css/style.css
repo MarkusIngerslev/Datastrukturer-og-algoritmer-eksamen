@@ -2,7 +2,37 @@ html,
 body {
   margin: 0;
   padding: 0;
+  height: 100vh;
 }
-canvas {
-  display: block;
+
+h1 {
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+h1,
+p {
+  text-align: center;
+  max-width: 600px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+#stats {
+  left: 10px;
+  top: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+}
+
+#canvas-container {
+  position: relative;
+  justify-content: center;
 }

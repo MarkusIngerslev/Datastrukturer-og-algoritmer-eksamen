@@ -1,13 +1,17 @@
 let quadtree;
 let boundary;
-let capacity = 4;
+let capacity = 1;
 let num = 1050;
 let radius = 2;
 
 let particles = [];
 
+let useQuadTree = true;
+let size = 500;
+
 function setup() {
-  createCanvas(400, 400);
+  const canvas = createCanvas(size, size);
+  canvas.parent("canvas-container");
   for (let i = 0; i < num; i++) {
     particles[i] = new Particle(random(width), random(height));
   }
@@ -15,43 +19,70 @@ function setup() {
 
 function draw() {
   background(220);
-  // Print the frameRate to see difference between QuadTree and Brute Force
   print(frameRate());
 
-  boundary = new Rectangle(width / 2, height / 2, width / 2, height / 2);
-  quadtree = new QuadTree(boundary, capacity);
-
-  // clear the quadtree
-  quadtree.clearQuadtree();
-
-  // insert random points into the quadtree
-  for (let i = 0; i < num; i++) {
-    let p = new Point(particles[i].x, particles[i].y, particles[i]);
-    quadtree.insert(p);
-
+  // Update all paricles
+  for (let i = 0; i < particles.length; i++) {
     particles[i].update();
     particles[i].display();
     particles[i].collided = false;
   }
 
-  // check for collisions between particles
-  for (let i = 0; i < particles.length; i++) {
-    let range = new Circle(particles[i].x, particles[i].y, particles[i].r);
-    let foundPoints = [];
-    quadtree.query(range, foundPoints);
+  if (useQuadTree) {
+    boundary = new Rectangle(width / 2, height / 2, width / 2, height / 2);
+    quadtree = new QuadTree(boundary, capacity);
 
-    for (let j = 0; j < foundPoints.length; j++) {
-      let p = foundPoints[j].userData;
-      if (particles[i] != p && particles[i].collides(p)) {
-        particles[i].collided = true;
+    // clear the quadtree
+    quadtree.clearQuadtree();
+
+    // insert random points into the quadtree
+    for (let i = 0; i < num; i++) {
+      let p = new Point(particles[i].x, particles[i].y, particles[i]);
+      quadtree.insert(p);
+    }
+
+    // check for collisions between particles
+    for (let i = 0; i < particles.length; i++) {
+      let range = new Circle(particles[i].x, particles[i].y, particles[i].r);
+      let foundPoints = [];
+      quadtree.query(range, foundPoints);
+
+      for (let j = 0; j < foundPoints.length; j++) {
+        let p = foundPoints[j].userData;
+        if (particles[i] != p && particles[i].collides(p)) {
+          particles[i].collided = true;
+        }
+      }
+    }
+    quadtree.display();
+  } else {
+    // Brute force method
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        if (particles[i].collides(particles[j])) {
+          particles[i].collided = true;
+          particles[j].collided = true;
+        }
       }
     }
   }
 
-  quadtree.display();
+  // Update stats outside canvas
+  document.getElementById("method-display").textContent = `Using: ${
+    useQuadTree ? "QuadTree" : "Brute Force"
+  }`;
+  document.getElementById("fps-display").textContent = `FPS: ${floor(
+    frameRate()
+  )}`;
 
   // drawRectangle();
   // drawCircle();
+}
+
+function keyPressed() {
+  if (key === "q" || key === "Q") {
+    useQuadTree = !useQuadTree;
+  }
 }
 
 function drawRectangle() {
