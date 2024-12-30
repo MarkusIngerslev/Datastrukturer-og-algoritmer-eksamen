@@ -204,7 +204,7 @@ class QuadTree {
     }
     // if the range does not intersect the boundary, return
     if (!range.intersects(this.boundary)) {
-      return false;
+      return found;
     } else {
       for (let i = 0; i < this.points.length; i++) {
         if (range.contains(this.points[i])) {

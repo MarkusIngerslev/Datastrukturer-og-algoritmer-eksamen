@@ -44,8 +44,8 @@ function draw() {
     // check for collisions between particles
     for (let i = 0; i < particles.length; i++) {
       let range = new Circle(particles[i].x, particles[i].y, particles[i].r);
-      let foundPoints = [];
-      quadtree.query(range, foundPoints);
+      let foundPoints = quadtree.query(range);
+      
 
       for (let j = 0; j < foundPoints.length; j++) {
         let p = foundPoints[j].userData;
